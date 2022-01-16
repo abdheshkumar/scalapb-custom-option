@@ -57,6 +57,8 @@ object Main extends App {
 
   println(s"Method: $method")
 
+  val aa = use_opts.GreeterGrpc.SERVICE.getSchemaDescriptor
+  println(aa)
   assert(
     numberField.getOptions.extension(my_opts.Wrapper.tags) == Seq(
       my_opts.Tag(name = Some("tag1")),
