@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package custom_options;
+
+import "custom_options/my_opts.proto";
+
+option (my_file_option) = "hello!";
+
+message OneMessage {
+  option (my_message_option).priority = 17;
+  option (message_auth_policy) = {
+    selector: "message-auth"
+  };
+
+  // Field level option, with repeated field.
+   int32 number = 1 [(Wrapper.tags) = {name: "tag1"},
+    (Wrapper.tags) = {name: "tag2"}];
+}
+
+// The greeting service definition.
+service Greeter {
+  option (service_auth_policy).selector = "service-auth";
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {
+    option (method_auth_policy) = {
+      selector: "method-auth"
+      enforcement_type: ENFORCEMENT_TYPE_ANY
+    };
+  }
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The request message containing the user's name.
+message HelloReply {
+  string name = 1;
+}
