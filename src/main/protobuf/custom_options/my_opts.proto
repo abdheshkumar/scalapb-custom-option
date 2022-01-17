@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package custom_options;
+package com.example.options;
 
 import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.FileOptions {
-  optional string my_file_option = 50000;
+  string my_file_option = 50000;
 }
 
 extend google.protobuf.MessageOptions {
-  optional MyMessageOption my_message_option = 50001;
+  MyMessageOption my_message_option = 50001;
 }
 
 extend google.protobuf.MessageOptions {
@@ -21,11 +21,11 @@ extend google.protobuf.MethodOptions {
 }
 
 extend google.protobuf.ServiceOptions {
-   AuthPolicy service_auth_policy = 50004;
+  AuthPolicy service_auth_policy = 50004;
 }
 
 message MyMessageOption {
-  optional int32 priority = 1;
+  int32 priority = 1;
 }
 
 message AuthPolicy {
@@ -39,7 +39,7 @@ message AuthPolicy {
 }
 
 message Tag {
-  optional string name = 1;
+  string name = 1;
 }
 
 // Extensions can be defined inside messages,

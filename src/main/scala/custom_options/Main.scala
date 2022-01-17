@@ -1,68 +1,73 @@
 package custom_options
 
+import com.example.{GreeterGrpc, OneMessage, UseOptsProto}
+import com.example.options.{MyMessageOption, MyOptsProto, Tag, Wrapper}
+
 object Main extends App {
 
   assert(
-    my_opts.MyOptsProto.myFileOption.get(use_opts.UseOptsProto.scalaDescriptor.getOptions) == Some(
-      "hello!"
-    )
+    MyOptsProto.myFileOption.get(
+      UseOptsProto.scalaDescriptor.getOptions
+    ) == "hello!"
   )
 
   assert(
-    my_opts.MyOptsProto.myMessageOption.get(use_opts.OneMessage.scalaDescriptor.getOptions).get ==
-      my_opts.MyMessageOption().update(_.priority := 17)
+    MyOptsProto.myMessageOption
+      .get(OneMessage.scalaDescriptor.getOptions)
+      .get ==
+      MyMessageOption().update(_.priority := 17)
   )
 
-  val numberField = use_opts.OneMessage.scalaDescriptor.findFieldByName("number").get
+  val numberField = OneMessage.scalaDescriptor.findFieldByName("number").get
   assert(
-    my_opts.Wrapper.tags.get(numberField.getOptions) == Seq(
-      my_opts.Tag(name = Some("tag1")),
-      my_opts.Tag(name = Some("tag2"))
+    Wrapper.tags.get(numberField.getOptions) == Seq(
+      Tag(name = "tag1"),
+      Tag(name = "tag2")
     )
   )
 
   // If you prefer to start with the descriptor, you use can the `extension`
   // method available through implicit conversion:
   assert(
-    use_opts.UseOptsProto.scalaDescriptor.getOptions
-      .extension(my_opts.MyOptsProto.myFileOption) == Some("hello!")
+    UseOptsProto.scalaDescriptor.getOptions
+      .extension(MyOptsProto.myFileOption) == "hello!"
   )
 
   assert(
-    use_opts.OneMessage.scalaDescriptor.getOptions
-      .extension(my_opts.MyOptsProto.myMessageOption)
+    OneMessage.scalaDescriptor.getOptions
+      .extension(MyOptsProto.myMessageOption)
       .get ==
-      my_opts.MyMessageOption().update(_.priority := 17)
+      MyMessageOption().update(_.priority := 17)
   )
 //Message
-  val message = use_opts.OneMessage.scalaDescriptor.getOptions
-    .extension(my_opts.MyOptsProto.messageAuthPolicy)
+  val message = OneMessage.scalaDescriptor.getOptions
+    .extension(MyOptsProto.messageAuthPolicy)
 
   println(s"Message: $message")
 
 //Service
-  val service = use_opts.GreeterGrpc.Greeter.scalaDescriptor.getOptions.extension(
-    my_opts.MyOptsProto.serviceAuthPolicy
+  val service = GreeterGrpc.Greeter.scalaDescriptor.getOptions.extension(
+    MyOptsProto.serviceAuthPolicy
   )
   println(s"Service: $service")
 
 //Method
-  val method = use_opts.GreeterGrpc.Greeter.scalaDescriptor.methods
+  val method = GreeterGrpc.Greeter.scalaDescriptor.methods
     .map(
       _.getOptions.extension(
-        my_opts.MyOptsProto.methodAuthPolicy
+        MyOptsProto.methodAuthPolicy
       )
     )
     .toList
 
   println(s"Method: $method")
 
-  val aa = use_opts.GreeterGrpc.SERVICE.getSchemaDescriptor
+  val aa = GreeterGrpc.SERVICE.getSchemaDescriptor
   println(aa)
   assert(
-    numberField.getOptions.extension(my_opts.Wrapper.tags) == Seq(
-      my_opts.Tag(name = Some("tag1")),
-      my_opts.Tag(name = Some("tag2"))
+    numberField.getOptions.extension(Wrapper.tags) == Seq(
+      Tag(name = "tag1"),
+      Tag(name = "tag2")
     )
   )
 }

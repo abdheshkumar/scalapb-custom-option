@@ -1,28 +1,30 @@
 syntax = "proto3";
 
-package custom_options;
-
+package com.example;
+/*option java_multiple_files = true;
+option java_outer_classname = "UseOptsProto";
+option java_package = "com.example";*/
 import "custom_options/my_opts.proto";
 
-option (my_file_option) = "hello!";
+option (com.example.options.my_file_option) = "hello!";
 
 message OneMessage {
-  option (my_message_option).priority = 17;
-  option (message_auth_policy) = {
+  option (com.example.options.my_message_option).priority = 17;
+  option (com.example.options.message_auth_policy) = {
     selector: "message-auth"
   };
 
   // Field level option, with repeated field.
-   int32 number = 1 [(Wrapper.tags) = {name: "tag1"},
-    (Wrapper.tags) = {name: "tag2"}];
+  int32 number = 1 [(com.example.options.Wrapper.tags) = {name: "tag1"},
+    (com.example.options.Wrapper.tags) = {name: "tag2"}];
 }
 
 // The greeting service definition.
 service Greeter {
-  option (service_auth_policy).selector = "service-auth";
+  option (com.example.options.service_auth_policy).selector = "service-auth";
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {
-    option (method_auth_policy) = {
+    option (com.example.options.method_auth_policy) = {
       selector: "method-auth"
       enforcement_type: ENFORCEMENT_TYPE_ANY
     };
