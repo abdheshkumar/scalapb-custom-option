@@ -1,6 +1,6 @@
 import scalapb.compiler.Version.scalapbVersion
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.13"
 
 //1.-------------It doesn't work------------------
 /*Compile / PB.targets := Seq(
